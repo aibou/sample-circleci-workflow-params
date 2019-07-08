@@ -7,9 +7,9 @@ jobs:
       - run:
           name: dry-run
           command: |
-            echo dry-run << parameters.environment >>
+            echo dry-run << parameters.env >>
     parameters:
-      environment:
+      env:
         type: enum
         enum: ["staging", "production"]
         default: "staging"
@@ -22,9 +22,9 @@ jobs:
       - run:
           name: apply
           command: |
-            echo apply << parameters.environment >>
+            echo apply << parameters.env >>
     parameters:
-      environment:
+      env:
         type: enum
         enum: ["staging", "production"]
         default: "staging"
@@ -34,7 +34,7 @@ workflows:
   staging_dry_run:
     jobs:
       - dry_run:
-          environment: "staging"
+          env: "staging"
           filter:
             branches:
               only: feature/*
@@ -42,7 +42,7 @@ workflows:
   staging_apply:
     jobs:
       - apply:
-          environment: "staging"
+          env: "staging"
           requires:
             - staging_dry_run
           filter:
@@ -52,7 +52,7 @@ workflows:
   production_dry_run:
     jobs:
       - dry_run:
-          environment: "production"
+          env: "production"
           filter:
             branches:
               only: staging
@@ -60,7 +60,7 @@ workflows:
   production_apply:
     jobs:
       - apply:
-          environment: "production"
+          env: "production"
           requires:
             - production_dry_run
           filter:
