@@ -1,0 +1,72 @@
+versions: 2
+jobs:
+  dry_run:
+    docker: 
+      - image: ruby:2.5.1
+    steps:
+      - run:
+          name: dry-run
+          command: |
+            echo dry-run << parameters.environment >>
+    parameters:
+      environment:
+        type: enum
+        enum: ["staging", "production"]
+        default: "staging"
+    
+
+  apply:
+    docker:
+      - image: ruby:2.5.1
+    steps:
+      - run:
+          name: apply
+          command: |
+            echo apply << parameters.environment >>
+    parameters:
+      environment:
+        type: enum
+        enum: ["staging", "production"]
+        default: "staging"
+
+workflows:
+  version: 2
+  staging_dry_run:
+    jobs:
+      - dry_run:
+          environment: "staging"
+          filter:
+            branches:
+              only: feature/*
+
+  staging_apply:
+    jobs:
+      - apply:
+          environment: "staging"
+          requires:
+            - staging_dry_run
+          filter:
+            branches:
+              only: staging
+
+  production_dry_run:
+    jobs:
+      - dry_run:
+          environment: "production"
+          filter:
+            branches:
+              only: staging
+
+  production_apply:
+    jobs:
+      - apply:
+          environment: "production"
+          requires:
+            - production_dry_run
+          filter:
+            branches:
+              only: production
+
+
+          
+      
