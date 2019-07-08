@@ -1,4 +1,4 @@
-versions: 2.1
+version: 2.1
 jobs:
   dry_run:
     docker: 
@@ -29,7 +29,6 @@ jobs:
             echo apply << parameters.env >>
 
 workflows:
-  version: 2
   staging_dry_run:
     jobs:
       - dry_run:
