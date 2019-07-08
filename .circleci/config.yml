@@ -3,38 +3,37 @@ jobs:
   dry_run:
     docker: 
       - image: ruby:2.5.1
+    parameters:
+      env:
+        type: enum
+        enum: ["staging", "production"]
+        default: "staging"
     steps:
       - run:
           name: dry-run
           command: |
-            echo dry-run << parameters.apply_to >>
-    parameters:
-      apply_to:
-        type: enum
-        enum: ["staging", "production"]
-        default: "staging"
-    
+            echo dry-run << parameters.env >>
 
   apply:
     docker:
       - image: ruby:2.5.1
+    parameters:
+      env:
+        type: enum
+        enum: ["staging", "production"]
+        default: "staging"
     steps:
       - run:
           name: apply
           command: |
-            echo apply << parameters.apply_to >>
-    parameters:
-      apply_to:
-        type: enum
-        enum: ["staging", "production"]
-        default: "staging"
+            echo apply << parameters.env >>
 
 workflows:
   version: 2
   staging_dry_run:
     jobs:
       - dry_run:
-          apply_to: "staging"
+          env: "staging"
           filters:
             branches:
               only: feature/*
@@ -42,7 +41,7 @@ workflows:
   staging_apply:
     jobs:
       - apply:
-          apply_to: "staging"
+          env: "staging"
           requires:
             - staging_dry_run
           filters:
@@ -52,7 +51,7 @@ workflows:
   production_dry_run:
     jobs:
       - dry_run:
-          apply_to: "production"
+          env: "production"
           filters:
             branches:
               only: staging
@@ -60,7 +59,7 @@ workflows:
   production_apply:
     jobs:
       - apply:
-          apply_to: "production"
+          env: "production"
           requires:
             - production_dry_run
           filters:
