@@ -33,6 +33,7 @@ workflows:
   staging_dry_run:
     jobs:
       - dry_run:
+          name: "staging dry-run"
           env: "staging"
           filters:
             branches:
@@ -41,6 +42,7 @@ workflows:
   staging_apply:
     jobs:
       - apply:
+          name: "staging apply"
           env: "staging"
           requires:
             - staging_dry_run
@@ -51,6 +53,7 @@ workflows:
   production_dry_run:
     jobs:
       - dry_run:
+          name: "production dry-run"
           env: "production"
           filters:
             branches:
@@ -59,6 +62,7 @@ workflows:
   production_apply:
     jobs:
       - apply:
+          name: "production apply"
           env: "production"
           requires:
             - production_dry_run
