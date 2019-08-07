@@ -1,7 +1,8 @@
 version: 2.1
 executors:
   default:
-    docker: ruby:2.5.1
+    docker: 
+      - image: ruby:2.5.1
     working_directory: ~/$CIRCLE_PROJECT_REPONAME
 
 jobs:
@@ -21,4 +22,4 @@ workflows:
   version: 2.1
   wf:
     jobs:
-      - test:
+      - test
